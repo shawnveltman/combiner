@@ -2,6 +2,14 @@ import os
 from datetime import datetime
 
 
+import os
+from datetime import datetime
+import re
+
+def process_content(content):
+    # Replace {{without space with {{ with space
+    return re.sub(r'\{\{(?!\s)', '{{ ', content)
+
 def write_directory_contents(directories, specific_files, output_file, file_extensions=None, exclude_dirs=None, exclude_files=None):
     if exclude_dirs is None:
         exclude_dirs = ['.git', '__pycache__', 'venv', 'env']
@@ -30,7 +38,8 @@ def write_directory_contents(directories, specific_files, output_file, file_exte
                 # Write file contents
                 with open(abs_file_path, 'r', encoding='utf-8') as file_content:
                     content = file_content.read()
-                    f.write(content)
+                    processed_content = process_content(content)
+                    f.write(processed_content)
                     f.write("\n\n")
 
             except Exception as e:
@@ -70,29 +79,30 @@ def write_directory_contents(directories, specific_files, output_file, file_exte
                         # Write file contents
                         with open(file_path, 'r', encoding='utf-8') as file_content:
                             content = file_content.read()
-                            f.write(content)
+                            processed_content = process_content(content)
+                            f.write(processed_content)
                             f.write("\n\n")
 
                     except Exception as e:
                         f.write(f"Error reading file {file_path}: {str(e)}\n\n")
 
-
 def main():
     # Example usage - now you can use absolute paths, relative paths, or paths with ~
     directories = [
-        # '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields',
+        '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields',
         # '/Users/shawnveltman/code/health/app/Services/MedicalRecordComponent',
         # '/Users/shawnveltman/code/pod/resources/js',
     ]
 
     # Add specific files you want to include
     specific_files = [
-        '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/date.blade.php',
-        '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/date-inputs.blade.php',
+        # '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/date.blade.php',
+        # '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/radio.blade.php',
+        # '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/date-inputs.blade.php',
         # '/Users/shawnveltman/code/health/app/Livewire/MedicalRecordComponent.php',
         # '/Users/shawnveltman/code/health/app/Services/MedicalRecordComponent/FrontEndSchemaService.php',
         # '/Users/shawnveltman/code/health/resources/views/livewire/medical-record-component.blade.php',
-        # '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/editing-field.blade.php',
+        '/Users/shawnveltman/code/health/resources/views/components/medical_record/fields/editing-field.blade.php',
 
     ]
 
